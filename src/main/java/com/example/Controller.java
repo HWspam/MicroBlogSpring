@@ -4,6 +4,7 @@ package com.example;
  */
 
 
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,36 +12,56 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
+
 @org.springframework.stereotype.Controller
 public class Controller {
 
-    ArrayList<Message> submitted = new ArrayList<Message>();
+    ArrayList<Message> submitted = new ArrayList();
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session) {
-        model.addAttribute("id", session.getAttribute("id"));
+        model.addAttribute("submitted", submitted);
+        model.addAttribute("userName", session.getAttribute("userName"));
+
         return "home";
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String each(HttpSession session, String userName) {
+        session.setAttribute("userName", userName);
+        return "redirect:/";
+    }
 
-        session.setAttribute("userName", user);
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public String hey(HttpSession session) {
+        session.invalidate();
         return "redirect:/";
     }
 
     @RequestMapping(path = "/add-message", method = RequestMethod.POST)
     public String sub(String messageText) {
         Message mess = new Message();
+
         mess.text = messageText;
-        submitted.add(mess); //
+        mess.id = submitted.size() + 1;
+        submitted.add(mess);
         return "redirect:/";
     }
 
 
-    @RequestMapping(path = "/delete", method = RequestMethod.POST)
+    @RequestMapping(path = "/delete-message", method = RequestMethod.POST)
     public String deleteMess(Integer deleteMessage) {
-        submitted.remove(deleteMessage - 1);
+
+        Message me = new Message();
+        for (Message submit : submitted) {
+            if (deleteMessage == submit.id) {
+                me = submit;
+            }
+
+        }
+
+        submitted.remove(me);
+
 
         return "redirect:/";
     }

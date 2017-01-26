@@ -6,18 +6,20 @@ package com.example;
 
 
 public class Message {
-    String id;
+
+    int id;
     String text;
 
     public Message (){
 
+
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -29,7 +31,7 @@ public class Message {
         this.text = text;
     }
 
-    public Message(String id, String text) {
+    public Message(int id, String text) {
         this.id = id;
         this.text = text;
     }
